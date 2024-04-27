@@ -1,20 +1,18 @@
-// nodemailer.js
-
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "tekiskymart920@gmail.com",
-    pass: "SULEMANKHAN5555",
+    pass: "unol ktol sndf viob",
   },
 });
 
 const sendFormDataEmail = (formData) => {
-  const mailOptions = {
-    from: "tekiskymart920@gmail.com",
-    to:  formData.email,
-    replyTo: formData.email,
+  // Email to be sent to you (tekiskymart920@gmail.com)
+  const mailOptionsToYou = {
+    from: formData.email,
+    to: "tekiskymart920@gmail.com",
     subject: "New Form Submission",
     text: `
       Name: ${formData.name}
@@ -23,11 +21,34 @@ const sendFormDataEmail = (formData) => {
     `,
   };
 
-  transporter.sendMail(mailOptions, (error, info) => {
+  // Email to be sent to the user
+  const mailOptionsToUser = {
+    from: "tekiskymart920@gmail.com",
+    to: formData.email,
+    subject: "Confirmation: Your Message Has Been Received",
+    text: `Dear ${formData.name},
+
+Thank you for contacting Tekisky Software Pvt Ltd. We have received your message and our team will contact you shortly.
+
+Best regards,
+Tekisky Software Pvt Ltd`,
+  };
+
+  // Send email to you
+  transporter.sendMail(mailOptionsToYou, function (error, info) {
     if (error) {
-      console.error("Error:", error);
+      console.log("Error sending email to you:", error);
     } else {
-      console.log("Email sent:", info.response);
+      console.log("Email sent to you:", info.response);
+    }
+  });
+
+  // Send email to the user
+  transporter.sendMail(mailOptionsToUser, function (error, info) {
+    if (error) {
+      console.log("Error sending email to user:", error);
+    } else {
+      console.log("Email sent to user:", info.response);
     }
   });
 };
